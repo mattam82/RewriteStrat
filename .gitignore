@@ -2,3 +2,9 @@
 *.aux
 *.glob
 *.v.d
+*.*.d
+*.o
+*.a
+*.vo
+*.bak
+/Makefile
