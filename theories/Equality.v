@@ -6,13 +6,13 @@
 (* GNU Lesser General Public License Version 2.1                      *)
 (**********************************************************************)
 
-let contrib_name = "Rewrite"
-let init_reference dir s = Coqlib.find_reference contrib_name dir s
-let gen_constant dir s = Coqlib.gen_constant "rewrite" dir s
+(** A helper constant when doing rewriting with leibniz equality *)
 
-let make_ref dir s = Coqlib.gen_reference contrib_name dir s
+Definition eq_rew (A : Type) (P : A -> Type) (x y : A) (e : x = y) : P y -> P x :=
+  match e with eq_refl => fun x => x end.
 
-let with_rollback f x =
-  States.with_state_protection_on_exception f x
+Definition eq_rew_inv (A : Type) (P : A -> Type) (x y : A) (e : y = x) : P y -> P x :=
+  match e with eq_refl => fun x => x end.
 
-let whd_all = Reductionops.whd_all
+Definition full_relation (A : Type) (B : Type) : A -> B -> Prop :=
+  fun x y => True.

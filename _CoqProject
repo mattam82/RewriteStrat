@@ -1,6 +1,6 @@
 -I src
 -I test-suite
--R theories RewriteStrat
+-Q theories RewriteStrat
 -I theories
 -extra-phony doc "html" "mkdir -p html/api && ocamldoc -html -d html/api `ocamlfind query -r coqdev85.all -i-format` -rectypes -I src src/*.ml"
 ZDEBUG = "-bin-annot -g"
@@ -13,5 +13,7 @@ src/g_rewrite_strat.ml4
 src/rewrite_strat_plugin_mod.ml
 src/rewrite_strat_plugin.mllib
 theories/Init.v
+theories/Equality.v
+theories/Morphisms.v
 theories/RewriteStrat.v
 test-suite/Basics.v

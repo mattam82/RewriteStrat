@@ -9,3 +9,5 @@
 val make_ref : string list -> string -> Globnames.global_reference
 
 val with_rollback : ('a -> 'b) -> 'a -> 'b
+
+val whd_all : Reductionops.contextual_reduction_function

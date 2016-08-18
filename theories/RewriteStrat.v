@@ -9,3 +9,5 @@
 (** The set of libraries required to run the rewrite plugin with all features. *)
 
 Require Export RewriteStrat.Init.
+Require Import RewriteStrat.Equality.
+Require Import RewriteStrat.Morphisms.
