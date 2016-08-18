@@ -8,6 +8,7 @@
 
 (** The set of libraries required to run the rewrite plugin with all features. *)
 
-Require Export RewriteStrat.Init.
-Require Import RewriteStrat.Equality.
-Require Import RewriteStrat.Morphisms.
+Require Export RewriteStrat.Init. (* Exports the [rew_strat] tactic *)
+Require RewriteStrat.Equality.
+Require RewriteStrat.Morphisms.
+Require RewriteStrat.CMorphisms.

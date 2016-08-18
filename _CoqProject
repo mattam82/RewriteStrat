@@ -15,5 +15,6 @@ src/rewrite_strat_plugin.mllib
 theories/Init.v
 theories/Equality.v
 theories/Morphisms.v
+theories/CMorphisms.v
 theories/RewriteStrat.v
 test-suite/Basics.v
