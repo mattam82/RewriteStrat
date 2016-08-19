@@ -312,10 +312,10 @@ Section GenericInstances.
   Program Instance respectful_per `(PER A R, PER B R') : PER (R ==> R').
 
   Next Obligation.
-  Proof with auto.
+  Proof with eauto.
     assert(R x0 x0).
-    transitivity y0... symmetry...
-    transitivity (y x0)... 
+    eapply transitivity... eapply symmetry...
+    eapply transitivity... 
   Qed.
 
   (** The complement of a relation conserves its proper elements. *)
@@ -347,9 +347,8 @@ Section GenericInstances.
     `(Transitive A R) : Proper (R --> R ++> impl) R.
   
   Next Obligation.
-  Proof with auto.
-    transitivity x...
-    transitivity x0...
+  Proof with eauto.
+    eapply transitivity...
   Qed.
 
   (** Proper declarations for partial applications. *)
@@ -359,8 +358,8 @@ Section GenericInstances.
   `(Transitive A R) : Proper (R --> flip impl) (R x) | 3.
 
   Next Obligation.
-  Proof with auto.
-    transitivity y...
+  Proof with eauto.
+    eapply transitivity...
   Qed.
 
   Global Program 
@@ -368,8 +367,8 @@ Section GenericInstances.
     `(Transitive A R) : Proper (R ++> impl) (R x) | 3.
 
   Next Obligation.
-  Proof with auto.
-    transitivity x0...
+  Proof with eauto.
+    eapply transitivity...
   Qed.
 
   Global Program 
@@ -377,27 +376,27 @@ Section GenericInstances.
     `(PER A R) : Proper (R ++> flip impl) (R x) | 3.
 
   Next Obligation.
-  Proof with auto.
-    transitivity y... symmetry...
+  Proof with eauto.
+    eapply transitivity... eapply symmetry...
   Qed.
 
   Global Program Instance trans_sym_contra_impl_morphism
     `(PER A R) : Proper (R --> impl) (R x) | 3.
 
   Next Obligation.
-  Proof with auto.
-    transitivity x0... symmetry...
+  Proof with eauto.
+    eapply transitivity... eapply symmetry...
   Qed.
 
   Global Program Instance per_partial_app_morphism
   `(PER A R) : Proper (R ==> iff) (R x) | 2.
 
   Next Obligation.
-  Proof with auto.
-    split. intros ; transitivity x0...
+  Proof with eauto.
+    split. intros ; eapply transitivity...
     intros.
-    transitivity y...
-    symmetry...
+    eapply transitivity...
+    eapply symmetry...
   Qed.
 
   (** Every Transitive relation induces a morphism by "pushing" an [R x y] on the left of an [R x z] proof to get an [R y z] goal. *)
@@ -407,8 +406,8 @@ Section GenericInstances.
   `(Transitive A R) : Proper (R ==> (@eq A) ==> flip impl) R | 2.
 
   Next Obligation.
-  Proof with auto.
-    transitivity y...
+  Proof with eauto.
+    eapply transitivity...
   Qed.
 
   (** Every Symmetric and Transitive relation gives rise to an equivariant morphism. *)
@@ -417,11 +416,11 @@ Section GenericInstances.
   Instance PER_morphism `(PER A R) : Proper (R ==> R ==> iff) R | 1.
 
   Next Obligation.
-  Proof with auto.
+  Proof with eauto.
     split ; intros.
-    transitivity x0... transitivity x... symmetry...
+    eapply transitivity... eapply transitivity... eapply symmetry...
 
-    transitivity y... transitivity y0... symmetry...
+    eapply transitivity... eapply transitivity... eapply symmetry...
   Qed.
 
   Lemma symmetric_equiv_flip `(Symmetric A R) : relation_equivalence R (flip R).
@@ -775,7 +774,7 @@ Instance related_refl {A} (R : relation A)
          (NA : NotArrow R) (** Prevents finding eq ==> eq to be reflexive! *)
          (HR : Reflexive R) (m : A) :
   Related R m m | 2.
-Proof. red. reflexivity. Defined.
+Proof. red. apply HR. Defined.
 Arguments related_refl /.
 Hint Cut [_* related_subrelation related_refl] : typeclass_instances.
 
