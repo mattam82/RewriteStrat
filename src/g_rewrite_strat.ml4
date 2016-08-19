@@ -49,11 +49,11 @@ ARGUMENT EXTEND rew_glob_constr_with_bindings
     GLOBALIZED BY glob_glob_constr_with_bindings
     SUBSTITUTED BY subst_glob_constr_with_bindings
 
-    (* RAW_TYPED AS constr_expr_with_bindings *)
+    RAW_TYPED AS constr_expr_with_bindings
     
     RAW_PRINTED BY pr_constr_expr_with_bindings
 
-    (* GLOB_TYPED AS glob_constr_with_bindings *)
+    GLOB_TYPED AS glob_constr_with_bindings
     GLOB_PRINTED BY pr_glob_constr_with_bindings
 
    [ constr_with_bindings(bl) ] -> [ bl ]
@@ -114,10 +114,10 @@ ARGUMENT EXTEND rew_strategy
     GLOBALIZED BY glob_strategy
     SUBSTITUTED BY subst_strategy
 
-    (* RAW_TYPED AS raw_strategy *)
+    RAW_TYPED AS raw_strategy
     RAW_PRINTED BY pr_raw_strategy
 
-    (* GLOB_TYPED AS glob_strategy *)
+    GLOB_TYPED AS glob_strategy
     GLOB_PRINTED BY pr_glob_strategy
 
     [ orient(o) rew_all_or_first(fi) rew_infer_pat(ip) rew_glob_constr_with_bindings(c) ] ->
@@ -184,20 +184,26 @@ END
 
 open Proofview.Notations
 
-let refine_tac ist simple flags c =
+let refine_tac ist simple flags {Glob_term.closure=closure;term=c} =
   let open Proofview in
-  Goal.nf_enter { Goal.enter = begin fun gl ->
+  Goal.nf_enter (begin fun gl ->
     let concl = Goal.concl gl in
     let env = Goal.env gl in
     let expected_type = Pretyping.OfType concl in
-    let c = Pretyping.type_uconstr ~flags ~expected_type ist c in
-    let update = { Sigma.run = fun sigma -> c.Pretyping.delayed env sigma } in
+    let lvar = { Pretyping.empty_lvar with
+      Pretyping.ltac_constrs = closure.Glob_term.typed;
+      Pretyping.ltac_uconstrs = closure.Glob_term.untyped;
+      Pretyping.ltac_idents = closure.Glob_term.idents;
+    } in
+    let update evd = Pretyping.understand_ltac flags env evd lvar expected_type c in
+    (* let c = Pretyping.type_uconstr ~flags ~expected_type ist c in *)
+    (* let update = { Sigma.run = fun sigma -> c.Pretyping.delayed env sigma } in *)
     let refine = Refine.refine ~unsafe:false update in
     if simple then refine
     else refine <*>
            Tactics.New.reduce_after_refine <*>
            Proofview.shelve_unifiable
-  end }
+  end)
 
 TACTIC EXTEND simple_refine_notc
 | [ "simple" "refine" "noclass" uconstr(c) ] -> [
@@ -206,7 +212,7 @@ TACTIC EXTEND simple_refine_notc
 END
 
 let solve_constraints_tac ist =
-  Proofview.Goal.enter { enter = begin fun gl ->
+  Proofview.Goal.enter (begin fun gl ->
     let env = Proofview.Goal.env gl in
     let evd = Proofview.Goal.sigma gl in
     let evd = Sigma.to_evar_map evd in
@@ -214,7 +220,7 @@ let solve_constraints_tac ist =
     try Evarconv.check_problems_are_solved env evd;
         Proofview.Unsafe.tclEVARS evd
     with e -> Proofview.tclZERO e
-  end }
+  end)
 
 TACTIC EXTEND solve_constraints
 | [ "resolve_constraints" ] -> [
