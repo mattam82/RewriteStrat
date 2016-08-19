@@ -1,0 +1,18 @@
+Technical points:
+- Generalized Transitivity
+- Deciding theory of relations with ; ⊔ ⊓ → ⁻¹
+- Related subrel R S <-> subrel R S
+- Notations for relations combinators.
+
+Meta:
+- Mixing rewrite_strat and coqrel and Coq standard
+- Integration:
+  + Add Hint Extern foo
+  + Remove generic hints from stdlib in our lib
+  + Optionaly add one Related -> (old) Proper
+
+  + Notations for Related/Proper/Monotonic, order of arguments
+
+  + <=> = <= /\ =>  (R <= S) for injectivity.
+  
+
