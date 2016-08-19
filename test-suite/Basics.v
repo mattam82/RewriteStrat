@@ -20,5 +20,7 @@ Module Al.
   Proof.
     intros.
     now rew_strat debug (topdown H).
+    Show Proof.
   Qed.
+
 End Al.

@@ -7,7 +7,6 @@
 (**********************************************************************)
 
 Require Export Coq.Unicode.Utf8_core.
-Require Export Coq.Program.Program.
 
 Create HintDb rewrite discriminated.
 

@@ -39,6 +39,8 @@ Class Related {A B} (R : A -> B -> Prop) (m : A) (n : B) : Prop :=
   related_prf : R m n.
 
 Notation Proper R m := (Related R m m).
+Notation " '@' 'Proper' A R m " := (@Related A A R m m) (at level 10, A at next level,
+                                                        R at next level, m at next level, only parsing).
 
 Section Proper.
   Context {A : Type}.
@@ -145,7 +147,7 @@ Ltac solve_respectful t :=
  match goal with
    | |- respectful _ _ _ _ =>
      let H := fresh "H" in
-     intros ? ? H; solve_respectful ltac:(setoid_rewrite H; t)
+     intros ? ? H; solve_respectful ltac:(rew_strat (* FIXME *) H; t)
    | _ => t; reflexivity
  end.
 
@@ -450,15 +452,15 @@ Section GenericInstances.
     reduce.
     unfold respectful, relation_equivalence, predicate_equivalence in * ; simpl in *.
     split ; intros.
-    
-    rewrite <- H0.
+
+    apply H0.
     apply H1.
-    rewrite H.
+    apply H.
     assumption.
     
-    rewrite H0.
+    apply H0.
     apply H1.
-    rewrite <- H.
+    apply H.
     assumption.
   Qed.
 
@@ -556,11 +558,7 @@ Instance proper_proper : Proper (relation_equivalence ==> eq ==> eq ==> iff) (@R
 Proof.
   simpl_relation.
   reduce in H.
-  split ; red ; intros.
-  setoid_rewrite <- H.
-  apply H0.
-  setoid_rewrite H.
-  apply H0.
+  split ; red ; intros; firstorder.
 Qed.
 
 (* Ltac proper_reflexive := *)
