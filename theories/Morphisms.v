@@ -86,8 +86,8 @@ Section Proper.
 
 End Proper.
 
-Arguments eq_proper /.
-Arguments reflexive_proper /.
+Arguments eq_proper / A x.
+Arguments reflexive_proper / A R H x.
 
 (** We favor the use of Leibniz equality or a declared reflexive relation 
   when resolving [Proper], otherwise, if the relation is given (not an evar),
